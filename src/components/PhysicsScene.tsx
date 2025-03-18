@@ -2,6 +2,11 @@ import { Physics, RigidBody } from '@react-three/rapier';
 import { useControls } from 'leva';
 
 export function PhysicsScene() {
+  // Physics debug control
+  const physics = useControls('Physics', {
+    debug: false
+  });
+
   // Controls for ground plane
   const ground = useControls('Ground', {
     visible: true,
@@ -37,7 +42,7 @@ export function PhysicsScene() {
   });
 
   return (
-    <Physics debug>
+    <Physics debug={physics.debug}>
       {/* Ground plane - static physics body */}
       <RigidBody type="fixed" position={ground.position as [number, number, number]}>
         <mesh receiveShadow visible={ground.visible}>
