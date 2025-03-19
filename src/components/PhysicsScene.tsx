@@ -1,71 +1,16 @@
 import { Physics } from '@react-three/rapier';
-import { useControls } from 'leva';
 import { InteractiveRigidBody } from './InteractiveRigidBody';
-import { useState, useEffect } from 'react';
+import { usePhysicsControls } from '../hooks/usePhysicsControls';
+import { useTransformControls } from '../hooks/useTransformControls';
 
 interface PhysicsSceneProps {
   transformRef?: React.RefObject<any>;
 }
 
 export function PhysicsScene({ transformRef }: PhysicsSceneProps) {
-  const [selectedObject, setSelectedObject] = useState<string | null>(null);
-  const [transformMode, setTransformMode] = useState<'translate' | 'rotate' | 'scale'>('translate');
-
-  // Physics debug control
-  const physics = useControls('Physics', {
-    debug: true
-  });
-
-  // Controls for ground plane
-  const ground = useControls('Ground', {
-    visible: true,
-    position: [0, -1.7, 0],
-    size: [15, 1, 15],
-    color: '#666666',
-  });
-
-  // Controls for dynamic box
-  const box = useControls('Dynamic Box', {
-    visible: true,
-    position: [0, -0.5, 0],
-    rotation: {
-      value: [0, 122, 2],
-      step: 0.1,
-    },
-    size: [0.1, 2, 2],
-    color: '#ff0000',
-    restitution: { min: 0, max: 1, value: 0.5 },
-    isStatic: true,
-  });
-
-  // Handle keyboard shortcuts for transform modes
-  const handleKeyPress = (event: KeyboardEvent) => {
-    if (!selectedObject) return;
-
-    switch(event.key.toLowerCase()) {
-      case 'g':
-        setTransformMode('translate');
-        break;
-      case 'r':
-        setTransformMode('rotate');
-        break;
-      case 's':
-        setTransformMode('scale');
-        break;
-      case 'escape':
-        setSelectedObject(null);
-        break;
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedObject]);
-
-  const handleSelect = (name: string) => {
-    setSelectedObject(current => current === name ? null : name);
-  };
+  // Get physics and transform controls from custom hooks
+  const { physics, ground, box } = usePhysicsControls();
+  const { selectedObject, transformMode, handleSelect } = useTransformControls();
 
   return (
     <Physics debug={physics.debug}>
