@@ -3,6 +3,7 @@ import { useThree } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useJoystickControls } from '../hooks/useJoystickControls';
 import { useTransformStore } from '../store/useTransformStore';
+import * as THREE from 'three';
 
 interface TouchControlsProps {
   onCameraMove?: (camera: THREE.Camera) => void;
