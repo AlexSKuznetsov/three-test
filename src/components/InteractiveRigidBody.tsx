@@ -1,15 +1,18 @@
-import { useRef } from 'react';
+import { memo } from 'react';
 import { RigidBody } from '@react-three/rapier';
 import { TransformControls } from '@react-three/drei';
 import type { RigidBodyProps } from '@react-three/rapier';
 import type { ThreeEvent } from '@react-three/fiber';
+import { useRigidBodyTransform } from '../hooks/useRigidBodyTransform';
+
+interface MeshProps {
+  visible?: boolean;
+  color?: string;
+  args?: [number, number, number];
+}
 
 interface InteractiveRigidBodyProps extends RigidBodyProps {
-  meshProps?: {
-    visible?: boolean;
-    color?: string;
-    args?: [number, number, number];
-  };
+  meshProps?: MeshProps;
   name: string;
   selected?: boolean;
   onSelect?: (name: string) => void;
@@ -17,7 +20,23 @@ interface InteractiveRigidBodyProps extends RigidBodyProps {
   transformControlsRef?: React.MutableRefObject<any>;
 }
 
-export function InteractiveRigidBody({ 
+// Memoized mesh component to prevent unnecessary re-renders
+const RigidMesh = memo(function RigidMesh(
+  { meshProps = {}, onClick }: { meshProps: MeshProps; onClick: (event: ThreeEvent<MouseEvent>) => void }
+) {
+  return (
+    <mesh onClick={onClick} visible={meshProps.visible}>
+      <boxGeometry args={meshProps.args || [1, 1, 1]} />
+      <meshStandardMaterial 
+        color={meshProps.color || '#ffffff'}
+        transparent
+        opacity={meshProps.visible ? 1 : 0}
+      />
+    </mesh>
+  );
+});
+
+export const InteractiveRigidBody = memo(function InteractiveRigidBody({ 
   meshProps = {}, 
   name,
   children,
@@ -27,31 +46,12 @@ export function InteractiveRigidBody({
   transformControlsRef,
   ...rigidBodyProps 
 }: InteractiveRigidBodyProps) {
-  const rigidBodyRef = useRef(null);
-
-  const handleClick = (event: ThreeEvent<MouseEvent>) => {
-    event.stopPropagation();
-    if (onSelect) {
-      onSelect(name);
-    }
-  };
+  const { rigidBodyRef, handleClick } = useRigidBodyTransform({ name, onSelect });
 
   return (
     <>
       <RigidBody ref={rigidBodyRef} {...rigidBodyProps}>
-        <mesh
-          onClick={handleClick}
-          // castShadow
-          // receiveShadow
-          visible={meshProps.visible}
-        >
-          <boxGeometry args={meshProps.args || [1, 1, 1]} />
-          <meshStandardMaterial 
-            color={meshProps.color || '#ffffff'}
-            transparent
-            opacity={meshProps.visible ? 1 : 0}
-          />
-        </mesh>
+        <RigidMesh meshProps={meshProps} onClick={handleClick} />
         {children}
       </RigidBody>
       
@@ -65,4 +65,5 @@ export function InteractiveRigidBody({
       )}
     </>
   );
-}
+});
+
