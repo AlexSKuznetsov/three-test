@@ -1,10 +1,13 @@
 import { Splat } from '@react-three/drei';
 import { PhysicsScene } from './PhysicsScene';
+import { useRef } from 'react';
 
 export function Scene() {
+  const transformRef = useRef<any>(null);
+
   return (
     <>
-      <PhysicsScene />
+      <PhysicsScene transformRef={transformRef} />
       
       {/* Lights */}
       <ambientLight intensity={0.5} />

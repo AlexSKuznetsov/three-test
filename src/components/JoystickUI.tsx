@@ -3,12 +3,17 @@ export function JoystickUI() {
     <div
       id="joystick-zone"
       style={{
-        position: 'absolute',
-        bottom: 20,
-        left: 20,
-        width: 150,
-        height: 150,
-        zIndex: 10,
+        position: 'fixed',
+        bottom: '20px',
+        left: '20px',
+        width: '120px',
+        height: '120px',
+        zIndex: 1000,
+        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+        borderRadius: '50%',
+        border: '2px solid rgba(0, 0, 0, 0.2)',
+        touchAction: 'none',
+        userSelect: 'none',
       }}
     />
   );
