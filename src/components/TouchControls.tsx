@@ -35,6 +35,7 @@ export function TouchControls({ onCameraMove }: TouchControlsProps) {
       ref={controlsRef}
       makeDefault
       enabled={!selectedObject && !isTransforming}
+      enableDamping={false}
     />
   );
 }
