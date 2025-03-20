@@ -3,7 +3,7 @@ import { useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls } from '@react-three/drei';
 import { useJoystickControls } from '../hooks/useJoystickControls';
 import { useTransformStore } from '../store/useTransformStore';
-import { useCollisionDetection } from '../hooks/useCollisionDetection';
+import { useCollisionDetection, MIN_GROUND_DISTANCE } from '../hooks/useCollisionDetection';
 import * as THREE from 'three';
 
 interface TouchControlsProps {
@@ -44,10 +44,9 @@ export function TouchControls({ onCameraMove }: TouchControlsProps) {
       if (collision.isGround) {
         // For ground collisions, only block downward movement when too close
         // This creates smoother camera behavior near the ground
-        const minGroundDistance = 1.2;
         // Only block downward movement when too close to the ground
         // This creates smoother camera behavior near the ground
-        if (currentY < minGroundDistance && currentY < prevPosition.current.y) {
+        if (currentY < MIN_GROUND_DISTANCE && currentY < prevPosition.current.y) {
           camera.position.y = prevPosition.current.y;
         }
       } else {

@@ -16,6 +16,10 @@ interface CollisionResult {
  * Hook for detecting collisions between camera and scene objects
  * Uses raycasting to check for objects in multiple directions
  */
+// Minimum safe distance from ground and objects
+export const MIN_GROUND_DISTANCE = 1.2;
+export const MIN_WALL_DISTANCE = 1.0;
+
 export function useCollisionDetection() {
   const { scene } = useThree();
   // Raycaster is used to detect objects in the scene along a ray
@@ -32,8 +36,8 @@ export function useCollisionDetection() {
     raycaster.current.set(position, new THREE.Vector3(0, -1, 0));
     const groundIntersects = raycaster.current.intersectObjects(scene.children, true);
     
-    // If we're too close to the ground (< 1.2 units), report ground collision
-    if (groundIntersects.length > 0 && groundIntersects[0].distance < 1.2) {
+    // If we're too close to the ground, report ground collision
+    if (groundIntersects.length > 0 && groundIntersects[0].distance < MIN_GROUND_DISTANCE) {
       return { collision: true, isGround: true };
     }
 
@@ -50,8 +54,8 @@ export function useCollisionDetection() {
       raycaster.current.set(position, dir.normalize());
       const intersects = raycaster.current.intersectObjects(scene.children, true);
       
-      // If we're too close to an object (< 1 unit), report wall collision
-      if (intersects.length > 0 && intersects[0].distance < 1) {
+      // If we're too close to an object, report wall collision
+      if (intersects.length > 0 && intersects[0].distance < MIN_WALL_DISTANCE) {
         return { collision: true, isGround: false };
       }
     }
