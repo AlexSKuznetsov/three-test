@@ -5,7 +5,7 @@ import { useSceneLighting } from '../hooks/useSceneLighting';
 
 // Memoized Splat component to prevent unnecessary re-renders
 const MemoizedSplat = memo(function MemoizedSplat() {
-  return <Splat src={`/model.splat`} position={[0, 0.25, 0]} />;
+  return <Splat src="/model.splat" position={[0, 0.25, 0]} />;
 });
 
 // Memoized Lights component
