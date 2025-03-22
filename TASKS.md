@@ -128,3 +128,116 @@ Create a Blender-like editor interface for adding, resizing, and moving rigid bo
 - Consider adding templates for common object configurations
 - Plan for future multi-user collaboration
 - Consider WebSocket integration for real-time updates
+
+---
+
+## 2. Dual Mode Application (Editor/Viewer)
+**Status**: 🔲 Not Started  
+**Priority**: High  
+**Estimated Time**: 1-2 weeks
+
+### Description
+Implement two distinct modes of operation: Editor mode for scene manipulation and Viewer mode for end-user interaction. Each mode should have its own UI, controls, and feature set.
+
+### Technical Requirements
+- Clear mode switching mechanism
+- Persistent mode state
+- Mode-specific UI components
+- Mode-specific controls and interactions
+
+### Implementation Steps
+
+#### 2.1 Application Mode Management
+- [ ] Create AppMode enum and store
+  ```typescript
+  enum AppMode {
+    EDITOR = 'editor',
+    VIEWER = 'viewer'
+  }
+  ```
+- [ ] Implement mode switching logic
+  - Mode persistence in localStorage
+  - URL-based mode selection
+  - Mode change confirmation dialogs
+- [ ] Add mode-specific routing
+  - /editor/* routes
+  - /viewer/* routes
+  - Mode-specific parameters
+
+#### 2.2 Editor Mode Features
+- [ ] Create EditorLayout component
+  - Full editing toolbar
+  - Property panels
+  - Scene hierarchy view
+- [ ] Implement editor-specific controls
+  - Transform controls
+  - Camera controls with no restrictions
+  - Keyboard shortcuts
+- [ ] Add editor UI components
+  - Mode switch button
+  - Save/Publish buttons
+  - Preview in Viewer mode button
+
+#### 2.3 Viewer Mode Features
+- [ ] Create ViewerLayout component
+  - Clean, minimal interface
+  - Information overlay system
+  - Interactive hotspots
+- [ ] Implement viewer-specific controls
+  - Restricted camera movement
+  - Object interaction controls
+  - Touch-friendly navigation
+- [ ] Add viewer UI components
+  - Information panels
+  - Navigation aids
+  - Interactive elements
+
+#### 2.4 Mode-Specific State Management
+- [ ] Create mode-specific stores
+  ```typescript
+  interface EditorState {
+    selectedObjects: string[];
+    activeTools: string[];
+    unsavedChanges: boolean;
+  }
+
+  interface ViewerState {
+    activeHotspots: string[];
+    visibleInfo: string[];
+    navigationHistory: string[];
+  }
+  ```
+- [ ] Implement state isolation
+  - Separate editor and viewer states
+  - Mode-specific actions
+  - State persistence rules
+
+#### 2.5 Scene Publishing System
+- [ ] Create publishing workflow
+  - Scene validation
+  - Asset optimization
+  - Version management
+- [ ] Implement preview system
+  - Live preview in viewer mode
+  - Preview sharing
+  - Version comparison
+
+### Acceptance Criteria
+1. Users can switch between modes seamlessly
+2. Editor mode provides full scene manipulation capabilities
+3. Viewer mode offers a clean, focused experience
+4. Mode-specific controls work as expected
+5. Scene state is properly preserved between mode switches
+6. Publishing workflow ensures scene validity
+7. Performance is optimized for each mode
+8. Mobile experience is fully functional in viewer mode
+
+### Dependencies
+- React Router for mode-based routing
+- Zustand for mode-specific state management
+- Local storage for mode persistence
+
+### Notes
+- Consider adding a presentation mode for guided tours
+- Plan for offline support in viewer mode
+- Consider adding analytics for viewer interactions
