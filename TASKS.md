@@ -241,3 +241,142 @@ Implement two distinct modes of operation: Editor mode for scene manipulation an
 - Consider adding a presentation mode for guided tours
 - Plan for offline support in viewer mode
 - Consider adding analytics for viewer interactions
+
+---
+
+## 3. Interactive Scene Annotations
+**Status**: 🔲 Not Started  
+**Priority**: High  
+**Estimated Time**: 2-3 weeks
+
+### Description
+Implement a system for adding and displaying interactive annotation points in the scene, featuring multiple content types and a modern Vision Pro-inspired UI. Annotations should be easily placeable in editor mode and provide an immersive viewing experience.
+
+### Technical Requirements
+- Pulsing 3D annotation markers
+- Multiple content types support
+- Modern, floating UI panels
+- Smooth animations and transitions
+- Responsive layout for all screen sizes
+
+### Implementation Steps
+
+#### 3.1 Annotation System Core
+- [ ] Create annotation data structure
+  ```typescript
+  interface Annotation {
+    id: string;
+    type: 'text' | 'video' | 'audio';
+    position: THREE.Vector3;
+    rotation: THREE.Euler;
+    content: AnnotationContent;
+    style: AnnotationStyle;
+  }
+
+  interface AnnotationContent {
+    title: string;
+    description?: string;
+    media?: {
+      url: string;
+      type: string;
+      spatialAudio?: boolean;
+    };
+    richText?: string;
+    images?: string[];
+  }
+
+  interface AnnotationStyle {
+    color: string;
+    size: number;
+    pulseSpeed: number;
+    visibility: number;
+  }
+  ```
+- [ ] Implement annotation marker component
+  - Pulsing effect shader
+  - Hover interactions
+  - Distance-based scaling
+- [ ] Add annotation placement system
+  - Raycasting for position
+  - Surface snapping
+  - Rotation controls
+
+#### 3.2 Content Types Implementation
+- [ ] Rich Text + Image Annotations
+  - Implement rich text editor
+  - Image upload and management
+  - Layout customization
+  - Typography system
+- [ ] Video Annotations
+  - Standard video player
+  - Spatial video support
+  - Custom video controls
+  - Picture-in-picture mode
+- [ ] Audio Annotations
+  - 3D audio positioning
+  - Real-time equalizer visualization
+  - Waveform display
+  - Playback controls
+
+#### 3.3 Vision Pro-Inspired UI
+- [ ] Design floating UI system
+  - Glassmorphism effects
+  - Depth-based blur
+  - Dynamic shadows
+  - Smooth transitions
+- [ ] Implement interaction gestures
+  - Swipe navigation
+  - Pinch-to-zoom
+  - Rotation gestures
+  - Multi-touch support
+- [ ] Create UI components
+  - Floating panels
+  - Content cards
+  - Media players
+  - Navigation controls
+
+#### 3.4 Editor Integration
+- [ ] Add annotation tools to editor
+  - Type selection
+  - Content editor
+  - Position adjustment
+  - Style customization
+- [ ] Implement annotation management
+  - List view
+  - Bulk operations
+  - Categories/Tags
+  - Search functionality
+
+#### 3.5 Viewer Experience
+- [ ] Create annotation viewer
+  - Content display modes
+  - Transition animations
+  - Navigation between annotations
+- [ ] Add interaction features
+  - Auto-focus camera
+  - Content scaling
+  - Audio/Video controls
+  - Touch gestures
+
+### Acceptance Criteria
+1. Annotations can be easily placed and edited in the scene
+2. All content types (text, video, audio) work correctly
+3. UI matches Vision Pro design aesthetic
+4. Animations and transitions are smooth
+5. Audio visualizer works in real-time
+6. Mobile experience is fully functional
+7. Editor tools are intuitive
+8. Viewer mode provides immersive experience
+
+### Dependencies
+- Three.js for 3D markers and effects
+- Draft.js or TipTap for rich text editing
+- Web Audio API for audio visualization
+- GSAP for animations
+- React Spring for physics-based animations
+
+### Notes
+- Consider WebXR support for VR viewing
+- Plan for spatial audio integration
+- Consider adding annotation templates
+- Add support for annotation sequences/tours
