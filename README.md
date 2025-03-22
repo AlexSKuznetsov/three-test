@@ -1,54 +1,50 @@
-# React + TypeScript + Vite
+# 3D Scene Viewer with React Three Fiber
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive 3D scene viewer built with React, Three.js, and React Three Fiber. Features smooth camera controls, physics interactions, and support for Gaussian Splatting models.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive 3D Viewing**: Smooth camera controls with collision detection
+- **Physics Integration**: Full physics simulation for interactive objects
+- **Gaussian Splatting**: Support for loading and viewing .splat models
+- **Touch Controls**: Mobile-friendly with joystick navigation
+- **Lighting Controls**: Adjustable ambient and directional lighting via Leva UI
+- **Transform Controls**: Object manipulation (translate, rotate, scale)
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React + TypeScript + Vite
+- Three.js and React Three Fiber
+- @react-three/drei for enhanced Three.js components
+- @react-three/rapier for physics
+- Leva for debug controls
+- Zustand for state management
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Getting Started
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+4. Open http://localhost:5173 in your browser
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Project Structure
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- `/src/components`: React components for the 3D scene
+- `/src/hooks`: Custom hooks for camera, physics, and lighting controls
+- `/src/store`: Zustand stores for state management
+- `/public`: Static assets including .splat models
+
+## Code Guidelines
+
+- Custom hooks are used to encapsulate complex logic
+- Components focus on presentation/rendering
+- TypeScript is used throughout with strict type checking
+- CSS modules for styling to avoid conflicts
+- Constants are defined in separate files
+- Tests are written using Vitest
