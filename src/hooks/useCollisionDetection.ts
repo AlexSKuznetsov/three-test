@@ -17,7 +17,7 @@ interface CollisionResult {
  * Uses raycasting to check for objects in multiple directions
  */
 // Minimum safe distance from ground and objects
-export const MIN_GROUND_DISTANCE = 1.2;
+export const MIN_GROUND_DISTANCE = 1.0;
 export const MIN_WALL_DISTANCE = 1.0;
 
 export function useCollisionDetection() {

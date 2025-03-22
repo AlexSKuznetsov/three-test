@@ -1,0 +1,11 @@
+# Coding Guidelines 
+- Always ask before making PR.
+- At the end of changes propose what also can be improved.
+- Propose changes in small steps.
+- After changes check README.MD and propose changes to it.
+- Styles module css file import must be always at the end of list.
+- Don't use magic numbers in codebase, instead use constants and if it uses more then 1 times create a file.
+- Annotate custom hooks with description.
+Move calculations in utils.ts files and add Vitest tests.
+Don't use inline styles, instead use styles module css file.
+- Try not to use any in TypeScript.

@@ -4,6 +4,7 @@ import { OrbitControls } from '@react-three/drei';
 import { useJoystickControls } from '../hooks/useJoystickControls';
 import { useTransformStore } from '../store/useTransformStore';
 import { useCollisionDetection, MIN_GROUND_DISTANCE } from '../hooks/useCollisionDetection';
+import { useOrbitControlsConfig } from '../hooks/useOrbitControlsConfig';
 import * as THREE from 'three';
 
 interface TouchControlsProps {
@@ -18,47 +19,43 @@ export function TouchControls({ onCameraMove }: TouchControlsProps) {
   const { camera } = useThree();
   // Reference to OrbitControls for camera manipulation
   const controlsRef = useRef<any>(null);
-  // Store the last valid camera position to revert to if needed
-  const prevPosition = useRef(new THREE.Vector3());
   // Track if an object is selected or being transformed
   const selectedObject = useTransformStore((state) => state.selectedObject);
   const isTransforming = useTransformStore((state) => state.isTransforming);
-  // Get collision detection function from our custom hook
+  // Get collision detection from our custom hook
   const { checkCollision } = useCollisionDetection();
+  // Store the last valid camera position
+  const prevPosition = useRef(camera.position.clone());
 
   /**
-   * Check for collisions every frame and handle camera position accordingly
-   * Two types of collisions are handled differently:
-   * 1. Ground collisions - only prevent downward movement when too close
-   * 2. Wall collisions - prevent all movement by reverting to previous position
+   * Handle collisions every frame
+   * Only blocks movement when absolutely necessary and
+   * maintains the last valid position for reference
    */
   useFrame(() => {
     // Skip collision checks if controls aren't ready or if interacting with objects
     if (!controlsRef.current || selectedObject || isTransforming) return;
 
-    // Check for any collisions at current camera position
+    // Check for collisions at current position
     const collision = checkCollision(camera.position);
-    const currentY = camera.position.y;
     
     if (collision.collision) {
       if (collision.isGround) {
-        // For ground collisions, only block downward movement when too close
-        // This creates smoother camera behavior near the ground
-        // Only block downward movement when too close to the ground
-        // This creates smoother camera behavior near the ground
-        if (currentY < MIN_GROUND_DISTANCE && currentY < prevPosition.current.y) {
-          camera.position.y = prevPosition.current.y;
+        // For ground collisions, only prevent downward movement
+        if (camera.position.y < MIN_GROUND_DISTANCE) {
+          return;
         }
       } else {
-        // For wall collisions, prevent all movement in that direction
-        // by reverting to the last known safe position
-        camera.position.copy(prevPosition.current);
+        // For wall collisions, only revert if we're moving towards the wall
+        const movement = new THREE.Vector3().subVectors(camera.position, prevPosition.current);
+        if (movement.length() > 0.01) { // Ignore tiny movements
+          camera.position.copy(prevPosition.current);
+        }
       }
+    } else {
+      // No collision, update previous position
+      prevPosition.current.copy(camera.position);
     }
-
-    // Always store current position as the last valid position
-    // This is used as a reference point if we need to revert due to collision
-    prevPosition.current.copy(camera.position);
   });
 
   // Use joystick controls with configuration
@@ -76,12 +73,16 @@ export function TouchControls({ onCameraMove }: TouchControlsProps) {
     }
   });
 
+  const orbitConfig = useOrbitControlsConfig();
+
   return (
     <OrbitControls
       ref={controlsRef}
       makeDefault
       enabled={!selectedObject && !isTransforming}
       enableDamping={false}
+      minPolarAngle={orbitConfig.minPolarAngle}
+      maxPolarAngle={orbitConfig.maxPolarAngle}
     />
   );
 }
