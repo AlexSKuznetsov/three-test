@@ -10,6 +10,7 @@ export interface SceneObject {
   type: ObjectType;
   position: [number, number, number];
   dimensions: [number, number, number];
+  rotation?: [number, number, number];
   isStatic?: boolean;
   isVisible?: boolean;
 }

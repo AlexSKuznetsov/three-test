@@ -1,0 +1,50 @@
+.properties {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.group {
+  margin-bottom: 1rem;
+}
+
+.group h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.inputs label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.inputs input {
+  width: 100%;
+  padding: 0.25rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+  background: white;
+}
+
+.inputs input:focus {
+  outline: none;
+  border-color: #0066cc;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.1);
+}
+
+.inputs input::-webkit-inner-spin-button,
+.inputs input::-webkit-outer-spin-button {
+  opacity: 1;
+  height: 1rem;
+}
