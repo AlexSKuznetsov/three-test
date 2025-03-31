@@ -2,6 +2,7 @@ import { FC, useRef, useCallback } from 'react';
 import { useEditorControls } from '../hooks/useEditorControls';
 import { useEditorStore } from '../store/useEditorStore';
 import { useScenePersistence } from '../hooks/useScenePersistence';
+import { useObjectPresets } from '../hooks/useObjectPresets';
 import styles from './EditorPanel.module.css';
 
 export const EditorPanel: FC = () => {
@@ -11,6 +12,7 @@ export const EditorPanel: FC = () => {
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
   const { saveScene, loadScene } = useScenePersistence();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { addPreset } = useObjectPresets();
 
   const handleDeleteObject = useCallback(() => {
     if (selectedObjectId) {
@@ -41,20 +43,26 @@ export const EditorPanel: FC = () => {
                 <button 
                   className={`${styles.controlButton} ${transformControls.mode === 'translate' ? styles.active : ''}`}
                   onClick={() => transformControls.setMode('translate')}
+                  title="Move object (G)"
                 >
                   Move
-                </button>
-                <button 
-                  className={`${styles.controlButton} ${transformControls.mode === 'rotate' ? styles.active : ''}`}
-                  onClick={() => transformControls.setMode('rotate')}
-                >
-                  Rotate
+                  <span className={styles.shortcut}>G</span>
                 </button>
                 <button 
                   className={`${styles.controlButton} ${transformControls.mode === 'scale' ? styles.active : ''}`}
                   onClick={() => transformControls.setMode('scale')}
+                  title="Scale object (S)"
                 >
                   Scale
+                  <span className={styles.shortcut}>S</span>
+                </button>
+                <button 
+                  className={`${styles.controlButton} ${transformControls.mode === 'rotate' ? styles.active : ''}`}
+                  onClick={() => transformControls.setMode('rotate')}
+                  title="Rotate object (R)"
+                >
+                  Rotate
+                  <span className={styles.shortcut}>R</span>
                 </button>
               </div>
             </div>
@@ -69,9 +77,10 @@ export const EditorPanel: FC = () => {
               <button 
                 className={`${styles.actionButton} ${styles.deleteButton}`}
                 onClick={handleDeleteObject}
-                title="Delete selected object"
+                title="Delete selected object (Del)"
               >
                 Delete Object
+                <span className={styles.shortcut}>Del</span>
               </button>
             </div>
           </section>
@@ -121,21 +130,41 @@ export const EditorPanel: FC = () => {
           <div className={styles.objectTypes}>
             <button 
               className={styles.addButton}
-              onClick={() => addObject('box')}
+              onClick={() => addObject({ type: 'box' })}
             >
               Box
             </button>
             <button 
               className={styles.addButton}
-              onClick={() => addObject('sphere')}
+              onClick={() => addObject({ type: 'sphere' })}
             >
               Sphere
             </button>
             <button 
               className={styles.addButton}
-              onClick={() => addObject('cylinder')}
+              onClick={() => addObject({ type: 'cylinder' })}
             >
               Cylinder
+            </button>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h3>Special Objects</h3>
+          <div className={styles.objectTypes}>
+            <button
+              className={`${styles.addButton} ${styles.presetButton}`}
+              onClick={() => addPreset('wall')}
+              title="Add wall (vertical plane)"
+            >
+              Wall
+            </button>
+            <button
+              className={`${styles.addButton} ${styles.presetButton}`}
+              onClick={() => addPreset('floor')}
+              title="Add floor (horizontal plane)"
+            >
+              Floor
             </button>
           </div>
         </section>

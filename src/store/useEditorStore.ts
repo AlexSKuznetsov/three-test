@@ -10,6 +10,7 @@ export interface SceneObject {
   type: ObjectType;
   position: [number, number, number];
   dimensions: [number, number, number];
+  isStatic?: boolean;
 }
 
 interface EditorState {
@@ -21,7 +22,7 @@ interface EditorState {
   setSelectedObject: (object: Object3D | null, objectId: string | null) => void;
   setTransformMode: (mode: TransformMode) => void;
   togglePanel: () => void;
-  addObject: (type: ObjectType) => void;
+  addObject: (config: Omit<SceneObject, 'id'> | { type: ObjectType }) => void;
   removeObject: (id: string) => void;
   updateObject: (id: string, updates: Partial<Omit<SceneObject, 'id'>>) => void;
   setObjects: (objects: SceneObject[]) => void;
@@ -39,14 +40,15 @@ export const useEditorStore = create<EditorState>((set) => ({
   }),
   setTransformMode: (mode) => set({ transformMode: mode }),
   togglePanel: () => set((state) => ({ isPanelVisible: !state.isPanelVisible })),
-  addObject: (type) => set((state) => ({
+  addObject: (config) => set((state) => ({
     objects: [
       ...state.objects,
       {
         id: nanoid(),
-        type,
-        position: [0, 1, 0],
-        dimensions: [1, 1, 1],
+        type: 'type' in config && typeof config.type === 'string' ? config.type as ObjectType : config.type,
+        position: 'position' in config ? config.position : [0, 1, 0],
+        dimensions: 'dimensions' in config ? config.dimensions : [1, 1, 1],
+        isStatic: 'isStatic' in config ? config.isStatic : false,
       },
     ],
   })),

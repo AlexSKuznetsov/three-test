@@ -30,9 +30,10 @@ Create a Blender-like editor interface for adding, resizing, and moving rigid bo
   - ✅ Add/Remove objects
   - ✅ Transform mode toggles (Move, Scale, Rotate)
   - ✅ Save/Load scene buttons
-- [ ] Add keyboard shortcuts system
+- [x] Add keyboard shortcuts system
   - ✅ Delete (Del)
-  - 🔲 Transform shortcuts (G - move, S - scale, R - rotate)
+  - ✅ Transform shortcuts (G - move, S - scale, R - rotate)
+  - ✅ Selection clear (Esc)
   - 🔲 Undo/Redo (Ctrl+Z, Ctrl+Shift+Z)
 
 #### 1.2 Rigid Body Management
@@ -40,6 +41,7 @@ Create a Blender-like editor interface for adding, resizing, and moving rigid bo
   - ✅ Support for basic shapes (Box, Sphere, Cylinder)
   - ✅ Configurable physics properties
   - ✅ Unique ID generation for each object
+  - ✅ Preset objects (Wall, Floor) with predefined settings
 - [x] Implement TransformControls
   - ✅ Position manipulation
   - ✅ Scale adjustment
