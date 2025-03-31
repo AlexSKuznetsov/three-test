@@ -22,6 +22,9 @@ Create a Blender-like editor interface for adding, resizing, and moving rigid bo
   - ✅ Add side panel with object controls
   - ✅ Implement collapsible sections
   - ✅ Add object type selection
+  - ✅ Add animations and transitions
+    - Panel slide in/out animation
+    - Closed by default
   - 🔲 Fix and implement object properties panel
     - Position sync with transform controls
     - Dimensions editing
@@ -42,6 +45,7 @@ Create a Blender-like editor interface for adding, resizing, and moving rigid bo
   - ✅ Configurable physics properties
   - ✅ Unique ID generation for each object
   - ✅ Preset objects (Wall, Floor) with predefined settings
+  - ✅ Debug mode toggle for physics outlines
 - [x] Implement TransformControls
   - ✅ Position manipulation
   - ✅ Scale adjustment

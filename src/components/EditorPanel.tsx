@@ -103,13 +103,7 @@ export const EditorPanel: FC = () => {
         <section className={styles.section}>
           <h3>Scene</h3>
           <div className={styles.sceneControls}>
-            <button 
-              className={`${styles.sceneButton} ${isDebugMode ? styles.active : ''}`}
-              onClick={toggleDebugMode}
-              title="Toggle physics debug mode"
-            >
-              {isDebugMode ? 'Hide Debug' : 'Show Debug'}
-            </button>
+
             <button 
               className={styles.sceneButton}
               onClick={saveScene}
@@ -189,6 +183,17 @@ export const EditorPanel: FC = () => {
             </button>
           </div>
         </section>
+        <div className={styles.debugControl}>
+          <input
+            type="checkbox"
+            id="debug-mode"
+            checked={isDebugMode}
+            onChange={toggleDebugMode}
+          />
+          <label htmlFor="debug-mode">
+            Show physics debug outlines
+          </label>
+        </div>
       </div>
     </div>
   );

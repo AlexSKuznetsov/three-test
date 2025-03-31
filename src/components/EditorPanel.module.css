@@ -1,3 +1,13 @@
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
 .editorPanel {
   position: fixed;
   top: 0;
@@ -9,6 +19,7 @@
   z-index: 1000;
   display: flex;
   flex-direction: column;
+  animation: slideIn 0.3s ease-out;
 }
 
 .header {
@@ -49,6 +60,8 @@
 .content {
   flex: 1;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
   padding: 1rem;
 }
 
