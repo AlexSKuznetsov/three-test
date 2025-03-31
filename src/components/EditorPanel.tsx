@@ -13,6 +13,8 @@ export const EditorPanel: FC = () => {
   const updateObject = useEditorStore((state) => state.updateObject);
   const objects = useEditorStore((state) => state.objects);
   const selectedObjectData = selectedObjectId ? objects.find(obj => obj.id === selectedObjectId) : null;
+  const isDebugMode = useEditorStore((state) => state.isDebugMode);
+  const toggleDebugMode = useEditorStore((state) => state.toggleDebugMode);
   const { saveScene, loadScene } = useScenePersistence();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { addPreset } = useObjectPresets();
@@ -101,6 +103,13 @@ export const EditorPanel: FC = () => {
         <section className={styles.section}>
           <h3>Scene</h3>
           <div className={styles.sceneControls}>
+            <button 
+              className={`${styles.sceneButton} ${isDebugMode ? styles.active : ''}`}
+              onClick={toggleDebugMode}
+              title="Toggle physics debug mode"
+            >
+              {isDebugMode ? 'Hide Debug' : 'Show Debug'}
+            </button>
             <button 
               className={styles.sceneButton}
               onClick={saveScene}

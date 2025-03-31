@@ -3,6 +3,7 @@ import { InteractiveRigidBody } from './InteractiveRigidBody';
 import { usePhysicsControls } from '../hooks/usePhysicsControls';
 import { useTransformControls } from '../hooks/useTransformControls';
 import { useEditorShortcuts } from '../hooks/useEditorShortcuts';
+import { useEditorStore } from '../store/useEditorStore';
 import { SceneObjects } from './SceneObjects';
 
 interface PhysicsSceneProps {
@@ -11,14 +12,15 @@ interface PhysicsSceneProps {
 
 export function PhysicsScene({ transformRef }: PhysicsSceneProps) {
   // Get physics and transform controls from custom hooks
-  const { physics, ground } = usePhysicsControls();
+  const { ground } = usePhysicsControls();
   const { selectedObject, transformMode, handleSelect } = useTransformControls();
+  const isDebugMode = useEditorStore((state) => state.isDebugMode);
 
   // Initialize keyboard shortcuts
   useEditorShortcuts();
 
   return (
-    <Physics debug={physics.debug}>
+    <Physics debug={isDebugMode}>
       <SceneObjects />
       {/* Ground plane - static physics body */}
       <InteractiveRigidBody 
