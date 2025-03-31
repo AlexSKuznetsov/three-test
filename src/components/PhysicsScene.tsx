@@ -2,6 +2,7 @@ import { Physics } from '@react-three/rapier';
 import { InteractiveRigidBody } from './InteractiveRigidBody';
 import { usePhysicsControls } from '../hooks/usePhysicsControls';
 import { useTransformControls } from '../hooks/useTransformControls';
+import { SceneObjects } from './SceneObjects';
 
 interface PhysicsSceneProps {
   transformRef?: React.RefObject<any>;
@@ -9,11 +10,12 @@ interface PhysicsSceneProps {
 
 export function PhysicsScene({ transformRef }: PhysicsSceneProps) {
   // Get physics and transform controls from custom hooks
-  const { physics, ground, box } = usePhysicsControls();
+  const { physics, ground } = usePhysicsControls();
   const { selectedObject, transformMode, handleSelect } = useTransformControls();
 
   return (
     <Physics debug={physics.debug}>
+      <SceneObjects />
       {/* Ground plane - static physics body */}
       <InteractiveRigidBody 
         name="ground"
@@ -25,24 +27,6 @@ export function PhysicsScene({ transformRef }: PhysicsSceneProps) {
           args: ground.size as [number, number, number]
         }}
         selected={selectedObject === 'ground'}
-        onSelect={handleSelect}
-        transformMode={transformMode}
-        transformControlsRef={transformRef}
-      />
-      
-      {/* Box with configurable physics */}
-      <InteractiveRigidBody 
-        name="box"
-        position={box.position as [number, number, number]}
-        rotation={box.rotation.map((angle: number) => angle * Math.PI / 180) as [number, number, number]}
-        restitution={box.restitution}
-        type={box.isStatic ? 'fixed' : 'dynamic'}
-        meshProps={{
-          visible: box.visible,
-          color: box.color,
-          args: box.size as [number, number, number]
-        }}
-        selected={selectedObject === 'box'}
         onSelect={handleSelect}
         transformMode={transformMode}
         transformControlsRef={transformRef}

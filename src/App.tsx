@@ -4,6 +4,8 @@ import { StatsGl } from '@react-three/drei';
 import { Scene } from './components/Scene';
 import { TouchControls } from './components/TouchControls';
 import { JoystickUI } from './components/JoystickUI';
+import { EditorPanel } from './components/EditorPanel';
+import { ToggleEditorButton } from './components/ToggleEditorButton';
 import { useCameraControls } from './hooks/useCameraControls';
 import styles from './App.module.css';
 
@@ -28,6 +30,8 @@ export default function App() {
         <Scene />
       </Canvas>
       <JoystickUI />
+      <ToggleEditorButton />
+      <EditorPanel />
     </>
   );
 }

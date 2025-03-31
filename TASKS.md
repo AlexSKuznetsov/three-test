@@ -9,42 +9,46 @@
 Create a Blender-like editor interface for adding, resizing, and moving rigid bodies in the scene. The editor should support saving and loading scenes in JSON format.
 
 ### Technical Requirements
-- Scene state persistence in JSON format
-- Intuitive UI for object manipulation
-- Support for multiple object types
-- Undo/Redo functionality
-- Scene export/import
+- ✅ Scene state persistence in JSON format
+- ✅ Intuitive UI for object manipulation
+- ✅ Support for multiple object types
+- 🔲 Undo/Redo functionality
+- ✅ Scene export/import
 
 ### Implementation Steps
 
 #### 1.1 Editor UI Setup
-- [ ] Create EditorPanel component
-  - Add side panel with object controls
-  - Implement collapsible sections
-  - Add object type selection
-- [ ] Create toolbar for common actions
-  - Add/Remove objects
-  - Transform mode toggles (Move, Scale, Rotate)
-  - Save/Load scene buttons
+- [x] Create EditorPanel component
+  - ✅ Add side panel with object controls
+  - ✅ Implement collapsible sections
+  - ✅ Add object type selection
+  - 🔲 Fix and implement object properties panel
+    - Position sync with transform controls
+    - Dimensions editing
+    - Real-time updates with physics
+- [x] Create toolbar for common actions
+  - ✅ Add/Remove objects
+  - ✅ Transform mode toggles (Move, Scale, Rotate)
+  - ✅ Save/Load scene buttons
 - [ ] Add keyboard shortcuts system
-  - Delete (Del)
-  - Transform shortcuts (G - move, S - scale, R - rotate)
-  - Undo/Redo (Ctrl+Z, Ctrl+Shift+Z)
+  - ✅ Delete (Del)
+  - 🔲 Transform shortcuts (G - move, S - scale, R - rotate)
+  - 🔲 Undo/Redo (Ctrl+Z, Ctrl+Shift+Z)
 
 #### 1.2 Rigid Body Management
-- [ ] Create RigidBodyFactory
-  - Support for basic shapes (Box, Sphere, Cylinder)
-  - Configurable physics properties
-  - Unique ID generation for each object
-- [ ] Implement TransformControls
-  - Position manipulation
-  - Scale adjustment
-  - Rotation control
-  - Snapping options
+- [x] Create RigidBodyFactory
+  - ✅ Support for basic shapes (Box, Sphere, Cylinder)
+  - ✅ Configurable physics properties
+  - ✅ Unique ID generation for each object
+- [x] Implement TransformControls
+  - ✅ Position manipulation
+  - ✅ Scale adjustment
+  - ✅ Rotation control
+  - 🔲 Snapping options
 - [ ] Add object properties panel
-  - Physics properties (mass, friction, restitution)
-  - Visual properties (color, opacity)
-  - Transform values input fields
+  - 🔲 Physics properties (mass, friction, restitution)
+  - 🔲 Visual properties (color, opacity)
+  - 🔲 Transform values input fields
 
 #### 1.3 Scene State Management
 - [ ] Design scene state structure
