@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import { Leva } from 'leva';
+
 import { StatsGl } from '@react-three/drei';
 import { Scene } from './components/Scene';
 import { TouchControls } from './components/TouchControls';
@@ -14,7 +14,7 @@ export default function App() {
 
   return (
     <>
-      <Leva collapsed />
+
       <Canvas
         dpr={1.5}
         gl={{ antialias: false }}

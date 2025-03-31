@@ -1,7 +1,7 @@
 # Project Tasks Backlog
 
 ## 1. Scene Editor with Rigid Body Management
-**Status**: 🔲 Not Started  
+**Status**: 🔄 In Progress  
 **Priority**: High  
 **Estimated Time**: 2-3 weeks
 

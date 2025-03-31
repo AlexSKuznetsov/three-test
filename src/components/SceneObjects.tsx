@@ -47,6 +47,7 @@ export const SceneObjects: FC = () => {
           position={obj.position}
           type={obj.type}
           dimensions={obj.dimensions}
+          isVisible={obj.isVisible !== false}
         />
       ))}
       

@@ -1,22 +1,9 @@
-import { useControls, folder } from 'leva';
 import type { Camera } from 'three';
 import { useCameraStore } from '../store/useCameraStore';
 import { useCallback } from 'react';
 
 export function useCameraControls() {
   const { position } = useCameraStore();
-
-  // Leva control for camera position
-  useControls({
-    Camera: folder({
-      position: {
-        value: position,
-        onChange: (value) => {
-          useCameraStore.getState().setPosition(value as [number, number, number]);
-        },
-      },
-    }),
-  });
 
   // Function to update camera position
   const updateCameraPosition = useCallback((camera: Camera) => {

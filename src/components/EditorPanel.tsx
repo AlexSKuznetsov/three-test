@@ -10,6 +10,9 @@ export const EditorPanel: FC = () => {
   const addObject = useEditorStore((state) => state.addObject);
   const removeObject = useEditorStore((state) => state.removeObject);
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
+  const updateObject = useEditorStore((state) => state.updateObject);
+  const objects = useEditorStore((state) => state.objects);
+  const selectedObjectData = selectedObjectId ? objects.find(obj => obj.id === selectedObjectId) : null;
   const { saveScene, loadScene } = useScenePersistence();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { addPreset } = useObjectPresets();
@@ -74,6 +77,15 @@ export const EditorPanel: FC = () => {
           <section className={styles.section}>
             <h3>Selected Object</h3>
             <div className={styles.selectedObjectControls}>
+              <button 
+                className={`${styles.actionButton}`}
+                onClick={() => selectedObjectId && updateObject(selectedObjectId, { 
+                  isVisible: !selectedObjectData?.isVisible 
+                })}
+                title={selectedObjectData?.isVisible ? 'Hide object' : 'Show object'}
+              >
+                {selectedObjectData?.isVisible ? 'Hide Object' : 'Show Object'}
+              </button>
               <button 
                 className={`${styles.actionButton} ${styles.deleteButton}`}
                 onClick={handleDeleteObject}

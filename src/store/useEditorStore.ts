@@ -11,6 +11,7 @@ export interface SceneObject {
   position: [number, number, number];
   dimensions: [number, number, number];
   isStatic?: boolean;
+  isVisible?: boolean;
 }
 
 interface EditorState {
@@ -49,6 +50,7 @@ export const useEditorStore = create<EditorState>((set) => ({
         position: 'position' in config ? config.position : [0, 1, 0],
         dimensions: 'dimensions' in config ? config.dimensions : [1, 1, 1],
         isStatic: 'isStatic' in config ? config.isStatic : false,
+        isVisible: 'isVisible' in config ? config.isVisible : true,
       },
     ],
   })),

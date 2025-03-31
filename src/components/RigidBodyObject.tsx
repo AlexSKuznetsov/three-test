@@ -8,6 +8,7 @@ interface RigidBodyObjectProps {
   position: [number, number, number];
   type: 'box' | 'sphere' | 'cylinder';
   dimensions: [number, number, number];
+  isVisible?: boolean;
 }
 
 const colliderMap: Record<RigidBodyObjectProps['type'], RigidBodyAutoCollider> = {
@@ -16,7 +17,7 @@ const colliderMap: Record<RigidBodyObjectProps['type'], RigidBodyAutoCollider> =
   cylinder: 'cuboid', // Using cuboid for cylinder as it's the closest approximation
 };
 
-export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, dimensions }) => {
+export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, dimensions, isVisible = true }) => {
   const rigidBodyRef = useRef<any>(null);
   const meshRef = useRef<Mesh>(null);
   const setSelectedObject = useEditorStore((state) => state.setSelectedObject);
@@ -71,9 +72,14 @@ export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, 
         ref={meshRef}
         onClick={handleClick}
         onPointerMissed={() => setSelectedObject(null, null)}
+        visible={isVisible}
       >
         {renderGeometry()}
-        <meshStandardMaterial color={isSelected ? '#ffa500' : '#ffffff'} />
+        <meshStandardMaterial 
+          color={isSelected ? '#ffa500' : '#ffffff'}
+          transparent={!isVisible}
+          opacity={isVisible ? 1 : 0.3}
+        />
       </mesh>
     </RigidBody>
   );
