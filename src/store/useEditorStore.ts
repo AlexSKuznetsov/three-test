@@ -38,9 +38,9 @@ export const useEditorStore = create<EditorState>((set) => ({
   selectedObject: null,
   selectedObjectId: null,
   transformMode: 'translate',
-  useGravity: true,
+  useGravity: false,
   isPanelVisible: false,
-  isDebugMode: false,
+  isDebugMode: true,
   objects: [],
   setSelectedObject: (object, objectId) => set({ 
     selectedObject: object,
