@@ -12,7 +12,7 @@ interface PhysicsSceneProps {
 
 export function PhysicsScene({ transformRef }: PhysicsSceneProps) {
   // Get physics and transform controls from custom hooks
-  const { ground } = usePhysicsControls();
+  const { ground, physics } = usePhysicsControls();
   const { selectedObject, transformMode, handleSelect } = useTransformControls();
   const isDebugMode = useEditorStore((state) => state.isDebugMode);
 
@@ -20,7 +20,7 @@ export function PhysicsScene({ transformRef }: PhysicsSceneProps) {
   useEditorShortcuts();
 
   return (
-    <Physics debug={isDebugMode}>
+    <Physics debug={isDebugMode} gravity={physics.gravity}>
       <SceneObjects />
       {/* Ground plane - static physics body */}
       <InteractiveRigidBody 

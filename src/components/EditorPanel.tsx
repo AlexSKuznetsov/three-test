@@ -15,6 +15,8 @@ export const EditorPanel: FC = () => {
   const selectedObjectData = selectedObjectId ? objects.find(obj => obj.id === selectedObjectId) : null;
   const isDebugMode = useEditorStore((state) => state.isDebugMode);
   const toggleDebugMode = useEditorStore((state) => state.toggleDebugMode);
+  const useGravity = useEditorStore((state) => state.useGravity);
+  const toggleGravity = useEditorStore((state) => state.toggleGravity);
   const { saveScene, loadScene } = useScenePersistence();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { addPreset } = useObjectPresets();
@@ -192,6 +194,17 @@ export const EditorPanel: FC = () => {
           />
           <label htmlFor="debug-mode">
             Show physics debug outlines
+          </label>
+        </div>
+        <div className={styles.debugControl}>
+          <input
+            type="checkbox"
+            id="use-gravity"
+            checked={useGravity}
+            onChange={toggleGravity}
+          />
+          <label htmlFor="use-gravity">
+            Use gravity
           </label>
         </div>
       </div>

@@ -21,11 +21,13 @@ interface EditorState {
   transformMode: TransformMode;
   isPanelVisible: boolean;
   isDebugMode: boolean;
+  useGravity: boolean;
   objects: SceneObject[];
   setSelectedObject: (object: Object3D | null, objectId: string | null) => void;
   setTransformMode: (mode: TransformMode) => void;
   togglePanel: () => void;
   toggleDebugMode: () => void;
+  toggleGravity: () => void;
   addObject: (config: Omit<SceneObject, 'id'> | { type: ObjectType }) => void;
   removeObject: (id: string) => void;
   updateObject: (id: string, updates: Partial<Omit<SceneObject, 'id'>>) => void;
@@ -36,6 +38,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   selectedObject: null,
   selectedObjectId: null,
   transformMode: 'translate',
+  useGravity: true,
   isPanelVisible: false,
   isDebugMode: false,
   objects: [],
@@ -46,6 +49,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   setTransformMode: (mode) => set({ transformMode: mode }),
   togglePanel: () => set((state) => ({ isPanelVisible: !state.isPanelVisible })),
   toggleDebugMode: () => set((state) => ({ isDebugMode: !state.isDebugMode })),
+  toggleGravity: () => set((state) => ({ useGravity: !state.useGravity })),
   addObject: (config) => set((state) => ({
     objects: [
       ...state.objects,
