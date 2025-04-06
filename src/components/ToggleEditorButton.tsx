@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { FC } from 'react';
 import { useEditorControls } from '../hooks/useEditorControls';
 import styles from './ToggleEditorButton.module.css';
@@ -7,7 +8,7 @@ export const ToggleEditorButton: FC = () => {
 
   return (
     <button 
-      className={`${styles.toggleButton} ${isPanelVisible ? styles.active : ''}`}
+      className={clsx(styles.toggleButton, { [styles.active]: isPanelVisible })}
       onClick={togglePanel}
       title={isPanelVisible ? 'Hide Editor' : 'Show Editor'}
     >

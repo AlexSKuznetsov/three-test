@@ -6,6 +6,6 @@ interface CameraStore {
 }
 
 export const useCameraStore = create<CameraStore>((set) => ({
-  position: [1.8, 1, 1],
+  position: [1, 1, 1],
   setPosition: (pos) => set({ position: pos }),
 }));

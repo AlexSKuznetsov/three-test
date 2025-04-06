@@ -8,12 +8,7 @@ export function useCameraControls() {
   // Function to update camera position
   const updateCameraPosition = useCallback((camera: Camera) => {
     const { x, y, z } = camera.position;
-    const roundedPos: [number, number, number] = [
-      Math.round(x * 100) / 100,
-      Math.round(y * 100) / 100,
-      Math.round(z * 100) / 100
-    ];
-    useCameraStore.getState().setPosition(roundedPos);
+    useCameraStore.getState().setPosition([x, y, z]);
   }, []); // Empty deps array since we're using getState() from Zustand
 
   return {

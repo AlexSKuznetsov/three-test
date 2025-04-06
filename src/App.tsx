@@ -18,7 +18,7 @@ export default function App() {
       <Canvas
         dpr={1.5}
         gl={{ antialias: false }}
-        camera={{ position: position, fov: 35 }}
+        camera={{ position: position, fov: 60 }}
         onCreated={({ camera }) => {
           // Initial camera position sync
           updateCameraPosition(camera);
