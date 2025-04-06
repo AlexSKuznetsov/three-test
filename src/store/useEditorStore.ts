@@ -10,7 +10,7 @@ export interface SceneObject {
   type: ObjectType;
   position: [number, number, number];
   dimensions: [number, number, number];
-  rotation?: [number, number, number];
+  rotation: [number, number, number];
   isStatic?: boolean;
   isVisible?: boolean;
 }
@@ -50,19 +50,23 @@ export const useEditorStore = create<EditorState>((set) => ({
   togglePanel: () => set((state) => ({ isPanelVisible: !state.isPanelVisible })),
   toggleDebugMode: () => set((state) => ({ isDebugMode: !state.isDebugMode })),
   toggleGravity: () => set((state) => ({ useGravity: !state.useGravity })),
-  addObject: (config) => set((state) => ({
-    objects: [
-      ...state.objects,
-      {
-        id: nanoid(),
-        type: 'type' in config && typeof config.type === 'string' ? config.type as ObjectType : config.type,
-        position: 'position' in config ? config.position : [0, 1, 0],
-        dimensions: 'dimensions' in config ? config.dimensions : [1, 1, 1],
-        isStatic: 'isStatic' in config ? config.isStatic : false,
-        isVisible: 'isVisible' in config ? config.isVisible : true,
-      },
-    ],
-  })),
+  addObject: (config) => set((state) => {
+    const defaultObject: SceneObject = {
+      id: nanoid(),
+      type: 'type' in config && typeof config.type === 'string' ? config.type as ObjectType : config.type,
+      position: 'position' in config ? config.position : [0, 1, 0],
+      dimensions: 'dimensions' in config ? config.dimensions : [1, 1, 1],
+      rotation: 'rotation' in config ? config.rotation : [0, 0, 0],
+      isStatic: 'isStatic' in config ? config.isStatic : false,
+      isVisible: 'isVisible' in config ? config.isVisible : true,
+    };
+    return {
+      objects: [
+        ...state.objects,
+        defaultObject
+      ]
+    };
+  }),
   removeObject: (id) => set((state) => ({
     objects: state.objects.filter((obj) => obj.id !== id),
     selectedObject: null,

@@ -21,6 +21,16 @@ export const EditorPanel: FC = () => {
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
   const updateObject = useEditorStore((state) => state.updateObject);
   const objects = useEditorStore((state) => state.objects);
+
+  const handleObjectUpdate = useCallback((updates: {
+    position?: [number, number, number];
+    dimensions?: [number, number, number];
+    rotation?: [number, number, number];
+  }) => {
+    if (selectedObjectId) {
+      updateObject(selectedObjectId, updates);
+    }
+  }, [selectedObjectId, updateObject]);
   const selectedObjectData = selectedObjectId ? objects.find(obj => obj.id === selectedObjectId) ?? null : null;
   const isDebugMode = useEditorStore((state) => state.isDebugMode);
   const toggleDebugMode = useEditorStore((state) => state.toggleDebugMode);
@@ -50,6 +60,7 @@ export const EditorPanel: FC = () => {
         <ObjectControls
           selectedObject={selectedObject}
           transformControls={transformControls}
+          onUpdateObject={handleObjectUpdate}
         />
 
         <SelectedObjectControls

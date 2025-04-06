@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useEditorStore } from '../store/useEditorStore';
+import { memo, useCallback } from 'react';
+import { useObjectProperties } from '../../hooks/useObjectProperties';
 import styles from './ObjectProperties.module.css';
 
 interface ObjectPropertiesProps {
@@ -8,58 +8,42 @@ interface ObjectPropertiesProps {
   onRotationChange: (rotation: [number, number, number]) => void;
 }
 
-export function ObjectProperties({ 
+export const ObjectProperties = memo<ObjectPropertiesProps>(function ObjectProperties({ 
   onPositionChange, 
   onDimensionsChange,
   onRotationChange 
-}: ObjectPropertiesProps) {
-  const selectedObject = useEditorStore((state) => state.selectedObject);
-  const selectedObjectData = useEditorStore((state) => {
-    const id = state.selectedObjectId;
-    return id ? state.objects.find(obj => obj.id === id) : null;
-  });
+}) {
+  const {
+    selectedObject,
+    selectedObjectData,
+    position,
+    dimensions,
+    rotation,
+    setPosition,
+    setDimensions,
+    setRotation,
+  } = useObjectProperties();
 
-  const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
-  const [dimensions, setDimensions] = useState<[number, number, number]>([1, 1, 1]);
-  const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
-
-  // Update local state when selected object changes
-  useEffect(() => {
-    if (selectedObject && selectedObjectData) {
-      const pos = selectedObject.position;
-      setPosition([pos.x, pos.y, pos.z]);
-
-      const rot = selectedObject.rotation;
-      setRotation([
-        rot.x * (180 / Math.PI),
-        rot.y * (180 / Math.PI),
-        rot.z * (180 / Math.PI)
-      ]);
-
-      setDimensions(selectedObjectData.dimensions);
-    }
-  }, [selectedObject, selectedObjectData]);
-
-  const handlePositionChange = (axis: number, value: number) => {
+  const handlePositionChange = useCallback((axis: number, value: number) => {
     const newPosition: [number, number, number] = [...position];
     newPosition[axis] = value;
     setPosition(newPosition);
     onPositionChange(newPosition);
-  };
+  }, [position, onPositionChange]);
 
-  const handleDimensionsChange = (axis: number, value: number) => {
+  const handleDimensionsChange = useCallback((axis: number, value: number) => {
     const newDimensions: [number, number, number] = [...dimensions];
     newDimensions[axis] = value;
     setDimensions(newDimensions);
     onDimensionsChange(newDimensions);
-  };
+  }, [dimensions, onDimensionsChange]);
 
-  const handleRotationChange = (axis: number, value: number) => {
+  const handleRotationChange = useCallback((axis: number, value: number) => {
     const newRotation: [number, number, number] = [...rotation];
     newRotation[axis] = value;
     setRotation(newRotation);
     onRotationChange(newRotation.map(deg => deg * (Math.PI / 180)) as [number, number, number]);
-  };
+  }, [rotation, onRotationChange]);
 
   if (!selectedObject || !selectedObjectData) {
     return null;
@@ -170,4 +154,4 @@ export function ObjectProperties({
       </div>
     </div>
   );
-}
+});

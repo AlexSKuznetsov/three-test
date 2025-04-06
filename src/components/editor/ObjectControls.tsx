@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import { TransformMode } from '../../store/useEditorStore';
-import styles from '../EditorPanel.module.css';
+import { ObjectProperties } from './ObjectProperties';
+import styles from './ObjectControls.module.css';
 
 interface TransformControls {
   mode: TransformMode;
@@ -10,9 +11,14 @@ interface TransformControls {
 interface ObjectControlsProps {
   selectedObject: any | null;
   transformControls: TransformControls;
+  onUpdateObject?: (updates: {
+    position?: [number, number, number];
+    dimensions?: [number, number, number];
+    rotation?: [number, number, number];
+  }) => void;
 }
 
-export const ObjectControls: FC<ObjectControlsProps> = memo(({ selectedObject, transformControls }) => {
+export const ObjectControls: FC<ObjectControlsProps> = memo(({ selectedObject, transformControls, onUpdateObject }) => {
   if (!selectedObject) {
     return (
       <section className={styles.section}>
@@ -53,6 +59,13 @@ export const ObjectControls: FC<ObjectControlsProps> = memo(({ selectedObject, t
           </button>
         </div>
       </div>
+      {onUpdateObject && (
+        <ObjectProperties
+          onPositionChange={(position) => onUpdateObject({ position })}
+          onDimensionsChange={(dimensions) => onUpdateObject({ dimensions })}
+          onRotationChange={(rotation) => onUpdateObject({ rotation })}
+        />
+      )}
     </section>
   );
 });

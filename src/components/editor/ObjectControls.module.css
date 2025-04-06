@@ -1,0 +1,50 @@
+.section {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.noSelection {
+  color: #666;
+  font-style: italic;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.transformControls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.controlButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f5f5f5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.controlButton:hover {
+  background: #e5e5e5;
+}
+
+.controlButton.active {
+  background: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+
+.shortcut {
+  font-size: 0.8em;
+  opacity: 0.7;
+  padding: 0.1rem 0.3rem;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}

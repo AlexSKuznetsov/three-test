@@ -5,3 +5,4 @@ export * from './SceneControls';
 export * from './AddObjectControls';
 export * from './SpecialObjectControls';
 export * from './PhysicsControls';
+export * from './ObjectProperties';
