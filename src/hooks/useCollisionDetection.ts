@@ -52,9 +52,12 @@ export function useCollisionDetection() {
     // Cast rays in each direction to check for nearby objects
     for (const dir of directions) {
       raycaster.current.set(position, dir.normalize());
-      const intersects = raycaster.current.intersectObjects(scene.children, true);
+      // Only check collisions with objects we explicitly added to the scene
+      const sceneObjects = scene.children.filter(obj => obj.userData?.isSceneObject === true);
+      const intersects = raycaster.current.intersectObjects(sceneObjects, true);
       
-      // If we're too close to an object, report wall collision
+
+
       if (intersects.length > 0 && intersects[0].distance < MIN_WALL_DISTANCE) {
         return { collision: true, isGround: false };
       }

@@ -59,8 +59,9 @@ export function useJoystickControls({ minDistance = 1.5, speed = 1, zoneId, onMo
   // Collision detection helper
   const canMove = (position: THREE.Vector3, direction: THREE.Vector3) => {
     raycaster.current.set(position, direction.normalize());
-    const intersects = raycaster.current.intersectObjects(
-      scene.children.filter(child => child.type === 'Mesh'),
+    // Only check collisions with objects we explicitly added to the scene
+    const sceneObjects = scene.children.filter(obj => obj.userData?.isSceneObject === true);
+    const intersects = raycaster.current.intersectObjects(sceneObjects,
       true
     );
     
