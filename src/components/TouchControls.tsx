@@ -40,6 +40,7 @@ export function TouchControls({ onCameraMove }: TouchControlsProps) {
     const collision = checkCollision(camera.position);
     
     if (collision.collision) {
+      console.log('Collision detected', collision);
       if (collision.isGround) {
         // For ground collisions, only prevent downward movement
         if (camera.position.y < MIN_GROUND_DISTANCE) {
@@ -61,7 +62,7 @@ export function TouchControls({ onCameraMove }: TouchControlsProps) {
   // Use joystick controls with configuration
   useJoystickControls({
     minDistance: 1.5,
-    speed: 1,
+    speed: 2,
     zoneId: 'joystick-zone',
     onMove: () => {
       onCameraMove?.(camera);

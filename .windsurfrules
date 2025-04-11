@@ -8,4 +8,4 @@
 - Annotate custom hooks with description.
 Move calculations in utils.ts files and add Vitest tests.
 Don't use inline styles, instead use styles module css file.
-- Try not to use any in TypeScript.
+- Try not to use Any in TypeScript.

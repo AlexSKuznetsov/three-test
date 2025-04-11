@@ -67,12 +67,15 @@ export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, 
       ref={rigidBodyRef}
       position={position}
       type={"kinematic" as RigidBodyTypeString} // Use kinematic type for editor control
-      colliders={colliderMap[type]}>
+      colliders={colliderMap[type]}
+      name={`rigid-body-${id}`}>
       <mesh
         ref={meshRef}
         onClick={handleClick}
         onPointerMissed={() => setSelectedObject(null, null)}
         visible={isVisible}
+        name={`mesh-${id}`}
+        userData={{ isSceneObject: true }} // Mark as our manually added object
       >
         {renderGeometry()}
         <meshStandardMaterial 
