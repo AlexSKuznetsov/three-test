@@ -2,26 +2,21 @@ import { FC, useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { RigidBody, RigidBodyAutoCollider } from '@react-three/rapier';
 import type { RapierRigidBody } from '@react-three/rapier';
-import { Mesh, Vector3 } from 'three';
+import { Mesh, Vector3, Quaternion, Euler } from 'three';
 import { useEditorStore } from '../store/useEditorStore';
 import { GEOMETRY_CONSTANTS } from '../constants/geometry';
 
 interface RigidBodyObjectProps {
   id: string;
   position: [number, number, number];
+  rotation?: [number, number, number];
   type: 'box' | 'sphere' | 'cylinder';
   dimensions: [number, number, number];
   isVisible?: boolean;
   opacity?: number;
 }
 
-const colliderMap: Record<RigidBodyObjectProps['type'], RigidBodyAutoCollider> = {
-  box: 'cuboid',
-  sphere: 'ball',
-  cylinder: 'cuboid', // Using cuboid for cylinder as it's the closest approximation
-};
-
-export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, dimensions, isVisible = true, opacity = 1 }) => {
+export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, rotation = [0, 0, 0], type, dimensions, isVisible = true, opacity = 1 }) => {
   const rigidBodyRef = useRef<RapierRigidBody>(null);
   const meshRef = useRef<Mesh>(null);
   const setSelectedObject = useEditorStore((state) => state.setSelectedObject);
@@ -51,6 +46,10 @@ export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, 
     if (isSelected && hasMovement) {
       // During transformation, directly copy mesh position to physics body
       rb.setTranslation(meshPos, true);
+      // Also sync rotation from mesh to physics body
+      const worldQuat = new Quaternion();
+      mesh.getWorldQuaternion(worldQuat);
+      rb.setRotation(worldQuat, true);
       rb.resetForces(true);
       rb.resetTorques(true);
       rb.wakeUp();
@@ -79,44 +78,25 @@ export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, 
     }
   });
 
-  // Update rigid body position when store position changes
+  // Update mesh scale when dimensions prop changes
   useEffect(() => {
+    if (meshRef.current) {
+      meshRef.current.scale.set(dimensions[0], dimensions[1], dimensions[2]);
+    }
+  }, [dimensions]);
+
+  // Sync physics body on prop changes (geometry will auto-update via React)
+  useEffect(() => {
+    // Sync physics body on prop changes (geometry will auto-update via React)
     if (rigidBodyRef.current) {
       const rb = rigidBodyRef.current;
       rb.setTranslation({ x: position[0], y: position[1], z: position[2] }, true);
+      const q = new Quaternion().setFromEuler(new Euler(rotation[0], rotation[1], rotation[2]));
+      rb.setRotation(q, true);
       rb.resetForces(true);
       rb.resetTorques(true);
-
-      // Debug: Log significant position mismatches only
-      const rbPosition = rb.translation();
-      const roundTo3 = (n: number) => Math.round(n * 1000) / 1000;
-      
-      const rbPos = { 
-        x: roundTo3(rbPosition.x), 
-        y: roundTo3(rbPosition.y), 
-        z: roundTo3(rbPosition.z) 
-      };
-      const targetPos = { 
-        x: roundTo3(position[0]), 
-        y: roundTo3(position[1]), 
-        z: roundTo3(position[2]) 
-      };
-      
-      const diff = {
-        x: Math.abs(rbPos.x - targetPos.x),
-        y: Math.abs(rbPos.y - targetPos.y),
-        z: Math.abs(rbPos.z - targetPos.z)
-      };
-      
-      // Only log if there's a significant mismatch
-      if (diff.x > POSITION_THRESHOLD || diff.y > POSITION_THRESHOLD || diff.z > POSITION_THRESHOLD) {
-        console.warn(`[${id}] Significant position mismatch:`);
-        console.log('RigidBody:', rbPos);
-        console.log('Target   :', targetPos);
-        console.log('Diff     :', diff);
-      }
     }
-  }, [position, isSelected, id]);
+  }, [position, rotation, isSelected, id]);
 
   // Select the RigidBody group so transforms apply to physics body
   const handleClick = (e: { stopPropagation: () => void }) => {
@@ -154,13 +134,24 @@ export const RigidBodyObject: FC<RigidBodyObjectProps> = ({ id, position, type, 
     }
   };
 
+  const colliderMap: Record<RigidBodyObjectProps['type'], RigidBodyAutoCollider> = {
+    box: 'cuboid',
+    sphere: 'ball',
+    cylinder: 'cuboid',
+  };
+
   return (
-    <RigidBody 
+    // Remount on dimensions change so auto-collider regenerates
+    <RigidBody
+      key={`${id}-${dimensions.join('-')}`}
       ref={rigidBodyRef}
       position={position}
-      type="kinematicPosition" // Always use kinematic for better control
+      rotation={rotation}
+      scale={dimensions}
       colliders={colliderMap[type]}
-      name={`rigid-body-${id}`}>
+      type="kinematicPosition"
+      name={`rigid-body-${id}`}
+    >
       <mesh
         ref={meshRef}
         onClick={handleClick}

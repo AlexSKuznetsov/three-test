@@ -22,19 +22,24 @@ export const SceneObjects: FC = () => {
       selectedObject.getWorldQuaternion(worldQuat);
       const worldEuler = new Euler().setFromQuaternion(worldQuat);
 
-      console.log(`Transform change - Mesh ${selectedObjectId}:`, {
-        position: worldPos,
-        rotation: worldEuler,
-        quaternion: worldQuat
-      });
-
-      updateObject(selectedObjectId, {
-        position: [worldPos.x, worldPos.y, worldPos.z],
-        rotation: [worldEuler.x, worldEuler.y, worldEuler.z]
-        // quaternion: [worldQuat.x, worldQuat.y, worldQuat.z, worldQuat.w]
-      });
+      if (transformMode === 'translate') {
+        updateObject(selectedObjectId, {
+          position: [worldPos.x, worldPos.y, worldPos.z]
+        });
+      } else if (transformMode === 'rotate') {
+        updateObject(selectedObjectId, {
+          rotation: [worldEuler.x, worldEuler.y, worldEuler.z]
+        });
+      } else if (transformMode === 'scale') {
+        // Update dimensions based on world scale
+        const worldScale = new Vector3();
+        selectedObject.getWorldScale(worldScale);
+        updateObject(selectedObjectId, {
+          dimensions: [worldScale.x, worldScale.y, worldScale.z]
+        });
+      }
     }
-  }, [selectedObject, selectedObjectId, updateObject]);
+  }, [selectedObject, selectedObjectId, updateObject, transformMode]);
 
   // Reset transform controls when selection changes
   useEffect(() => {
@@ -49,11 +54,12 @@ export const SceneObjects: FC = () => {
 
   return (
     <>
-      {objects.map(({ id, position, type, dimensions, isVisible, opacity }) => (
+      {objects.map(({ id, position, rotation, type, dimensions, isVisible, opacity }) => (
         <RigidBodyObject
           key={id}
           id={id}
           position={position}
+          rotation={rotation}
           type={type}
           dimensions={dimensions}
           isVisible={isVisible !== false}

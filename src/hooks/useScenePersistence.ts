@@ -30,7 +30,6 @@ export const useScenePersistence = () => {
       
       return true;
     } catch (error) {
-      console.error('Failed to save scene:', error);
       return false;
     }
   }, [objects]);
@@ -51,13 +50,11 @@ export const useScenePersistence = () => {
           setObjects(sceneData.objects);
           resolve(true);
         } catch (error) {
-          console.error('Failed to load scene:', error);
           resolve(false);
         }
       };
       
       reader.onerror = () => {
-        console.error('Failed to read scene file');
         resolve(false);
       };
       
