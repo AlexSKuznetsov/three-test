@@ -13,6 +13,7 @@ export interface SceneObject {
   rotation: [number, number, number];
   isStatic?: boolean;
   isVisible?: boolean;
+  opacity?: number;
 }
 
 interface EditorState {
@@ -28,6 +29,7 @@ interface EditorState {
   togglePanel: () => void;
   toggleDebugMode: () => void;
   toggleGravity: () => void;
+  toggleTransparency: (id: string) => void;
   addObject: (config: Omit<SceneObject, 'id'> | { type: ObjectType }) => void;
   removeObject: (id: string) => void;
   updateObject: (id: string, updates: Partial<Omit<SceneObject, 'id'>>) => void;
@@ -50,6 +52,20 @@ export const useEditorStore = create<EditorState>((set) => ({
   togglePanel: () => set((state) => ({ isPanelVisible: !state.isPanelVisible })),
   toggleDebugMode: () => set((state) => ({ isDebugMode: !state.isDebugMode })),
   toggleGravity: () => set((state) => ({ useGravity: !state.useGravity })),
+
+  toggleTransparency: (id) => set((state) => {
+    const object = state.objects.find(obj => obj.id === id);
+    if (!object) return state;
+    
+    // If opacity is undefined or 1, set to 0.5, otherwise set to 1
+    const newOpacity = (!object.opacity || object.opacity === 1) ? 0.5 : 1;
+    
+    return {
+      objects: state.objects.map(obj =>
+        obj.id === id ? { ...obj, opacity: newOpacity } : obj
+      )
+    };
+  }),
   addObject: (config) => set((state) => {
     const defaultObject: SceneObject = {
       id: nanoid(),
@@ -59,6 +75,7 @@ export const useEditorStore = create<EditorState>((set) => ({
       rotation: 'rotation' in config ? config.rotation : [0, 0, 0],
       isStatic: 'isStatic' in config ? config.isStatic : false,
       isVisible: 'isVisible' in config ? config.isVisible : true,
+      opacity: 'opacity' in config ? config.opacity : 0.5, // Default to transparent
     };
     return {
       objects: [

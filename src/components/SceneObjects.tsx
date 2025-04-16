@@ -1,5 +1,6 @@
 import { FC, useCallback, useEffect } from 'react';
 import { TransformControls } from '@react-three/drei';
+import { Vector3, Quaternion, Euler } from 'three';
 import { useEditorStore } from '../store/useEditorStore';
 import { RigidBodyObject } from './RigidBodyObject';
 
@@ -11,21 +12,29 @@ export const SceneObjects: FC = () => {
   const updateObject = useEditorStore((state) => state.updateObject);
   const setSelectedObject = useEditorStore((state) => state.setSelectedObject);
 
-  // Debounce transform changes to avoid overwhelming updates
+  // Handle transform changes
   const handleTransformChange = useCallback(() => {
     if (selectedObject && selectedObjectId) {
-      const position = selectedObject.position.toArray() as [number, number, number];
-      // Only update if position actually changed
-      const currentObject = objects.find(obj => obj.id === selectedObjectId);
-      if (currentObject && (
-        currentObject.position[0] !== position[0] ||
-        currentObject.position[1] !== position[1] ||
-        currentObject.position[2] !== position[2]
-      )) {
-        updateObject(selectedObjectId, { position });
-      }
+      // Use world-space transform values
+      const worldPos = new Vector3();
+      selectedObject.getWorldPosition(worldPos);
+      const worldQuat = new Quaternion();
+      selectedObject.getWorldQuaternion(worldQuat);
+      const worldEuler = new Euler().setFromQuaternion(worldQuat);
+
+      console.log(`Transform change - Mesh ${selectedObjectId}:`, {
+        position: worldPos,
+        rotation: worldEuler,
+        quaternion: worldQuat
+      });
+
+      updateObject(selectedObjectId, {
+        position: [worldPos.x, worldPos.y, worldPos.z],
+        rotation: [worldEuler.x, worldEuler.y, worldEuler.z]
+        // quaternion: [worldQuat.x, worldQuat.y, worldQuat.z, worldQuat.w]
+      });
     }
-  }, [selectedObject, selectedObjectId, objects, updateObject]);
+  }, [selectedObject, selectedObjectId, updateObject]);
 
   // Reset transform controls when selection changes
   useEffect(() => {
@@ -40,14 +49,15 @@ export const SceneObjects: FC = () => {
 
   return (
     <>
-      {objects.map((obj) => (
+      {objects.map(({ id, position, type, dimensions, isVisible, opacity }) => (
         <RigidBodyObject
-          key={obj.id}
-          id={obj.id}
-          position={obj.position}
-          type={obj.type}
-          dimensions={obj.dimensions}
-          isVisible={obj.isVisible !== false}
+          key={id}
+          id={id}
+          position={position}
+          type={type}
+          dimensions={dimensions}
+          isVisible={isVisible !== false}
+          opacity={opacity ?? 1}
         />
       ))}
       
@@ -55,9 +65,11 @@ export const SceneObjects: FC = () => {
         <TransformControls
           object={selectedObject}
           mode={transformMode}
-          size={0.5}
-          onChange={handleTransformChange}
+          size={0.8}
+          space="world"
           onObjectChange={handleTransformChange}
+          // Only update on mouse up to avoid jitter
+          onChange={() => {}}
         />
       )}
     </>

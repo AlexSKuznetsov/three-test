@@ -7,13 +7,15 @@ interface SelectedObjectControlsProps {
   selectedObjectData: SceneObject | null;
   onDelete: () => void;
   onToggleVisibility: () => void;
+  onToggleTransparency: () => void;
 }
 
 export const SelectedObjectControls: FC<SelectedObjectControlsProps> = memo(({
   selectedObjectId,
   selectedObjectData,
   onDelete,
-  onToggleVisibility
+  onToggleVisibility,
+  onToggleTransparency
 }) => {
   if (!selectedObjectId) return null;
 
@@ -28,6 +30,7 @@ export const SelectedObjectControls: FC<SelectedObjectControlsProps> = memo(({
         >
           {selectedObjectData?.isVisible ? 'Hide Object' : 'Show Object'}
         </button>
+     
         <button 
           className={`${styles.actionButton} ${styles.deleteButton}`}
           onClick={onDelete}
@@ -37,6 +40,14 @@ export const SelectedObjectControls: FC<SelectedObjectControlsProps> = memo(({
           <span className={styles.shortcut}>Del</span>
         </button>
       </div>
+      <label className={styles.checkboxLabel}>
+          <input
+            type="checkbox"
+            checked={selectedObjectData?.opacity === 0.5}
+            onChange={onToggleTransparency}
+          />
+          Transparent
+        </label>
     </section>
   );
 });

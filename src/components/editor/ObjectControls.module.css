@@ -1,6 +1,5 @@
 .section {
   margin-bottom: 1rem;
-  padding: 1rem;
   border-bottom: 1px solid #ddd;
 }
 
@@ -11,8 +10,9 @@
 
 .controls {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: center;
 }
 
 .transformControls {

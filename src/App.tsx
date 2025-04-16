@@ -1,5 +1,5 @@
+import { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-
 import { StatsGl } from '@react-three/drei';
 import { Scene } from './components/Scene';
 import { TouchControls } from './components/TouchControls';
@@ -16,7 +16,7 @@ export default function App() {
     <>
 
       <Canvas
-        dpr={1.5}
+        dpr={1.5} // Set device pixel ratio for better quality
         gl={{ antialias: false }}
         camera={{ position: position, fov: 60 }}
         onCreated={({ camera }) => {
@@ -24,10 +24,12 @@ export default function App() {
           updateCameraPosition(camera);
         }}
       >
-        <color attach='background' args={['white']} />
-        <StatsGl className={styles.stats} />
-        <TouchControls onCameraMove={updateCameraPosition} />
-        <Scene />
+        <Suspense fallback={null}>
+          <color attach='background' args={['white']} />
+          <StatsGl className={styles.stats} />
+          <TouchControls onCameraMove={updateCameraPosition} />
+          <Scene />
+        </Suspense>
       </Canvas>
       <JoystickUI />
       <ToggleEditorButton />

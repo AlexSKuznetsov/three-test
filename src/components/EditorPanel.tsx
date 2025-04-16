@@ -20,6 +20,7 @@ export const EditorPanel: FC = () => {
   const removeObject = useEditorStore((state) => state.removeObject);
   const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
   const updateObject = useEditorStore((state) => state.updateObject);
+  const toggleTransparency = useEditorStore((state) => state.toggleTransparency);
   const objects = useEditorStore((state) => state.objects);
 
   const handleObjectUpdate = useCallback((updates: {
@@ -51,6 +52,12 @@ export const EditorPanel: FC = () => {
     }
   }, [selectedObjectId, selectedObjectData?.isVisible, updateObject]);
 
+  const handleToggleTransparency = useCallback(() => {
+    if (selectedObjectId) {
+      toggleTransparency(selectedObjectId);
+    }
+  }, [selectedObjectId, toggleTransparency]);
+
   if (!isPanelVisible) return null;
 
   return (
@@ -68,6 +75,7 @@ export const EditorPanel: FC = () => {
           selectedObjectData={selectedObjectData}
           onDelete={handleDeleteObject}
           onToggleVisibility={handleToggleVisibility}
+          onToggleTransparency={handleToggleTransparency}
         />
 
         <SceneControls

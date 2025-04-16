@@ -25,21 +25,21 @@ export const ObjectProperties = memo<ObjectPropertiesProps>(function ObjectPrope
   } = useObjectProperties();
 
   const handlePositionChange = useCallback((axis: number, value: number) => {
-    const newPosition: [number, number, number] = [...position];
+    const newPosition: [number, number, number] = [position[0], position[1], position[2]];
     newPosition[axis] = value;
     setPosition(newPosition);
     onPositionChange(newPosition);
   }, [position, onPositionChange]);
 
   const handleDimensionsChange = useCallback((axis: number, value: number) => {
-    const newDimensions: [number, number, number] = [...dimensions];
+    const newDimensions: [number, number, number] = [dimensions[0], dimensions[1], dimensions[2]];
     newDimensions[axis] = value;
     setDimensions(newDimensions);
     onDimensionsChange(newDimensions);
   }, [dimensions, onDimensionsChange]);
 
   const handleRotationChange = useCallback((axis: number, value: number) => {
-    const newRotation: [number, number, number] = [...rotation];
+    const newRotation: [number, number, number] = [rotation[0], rotation[1], rotation[2]];
     newRotation[axis] = value;
     setRotation(newRotation);
     onRotationChange(newRotation.map(deg => deg * (Math.PI / 180)) as [number, number, number]);

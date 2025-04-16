@@ -1,49 +1,46 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useEditorStore } from '../store/useEditorStore';
 
+/**
+ * Hook for accessing and modifying selected object properties
+ * Uses Zustand store directly without local state
+ */
 export const useObjectProperties = () => {
   const selectedObject = useEditorStore((state) => state.selectedObject);
+  const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
   const selectedObjectData = useEditorStore((state) => {
     const id = state.selectedObjectId;
     return id ? state.objects.find(obj => obj.id === id) : null;
   });
   const updateObject = useEditorStore((state) => state.updateObject);
-  const selectedObjectId = useEditorStore((state) => state.selectedObjectId);
 
-  const [position, setPosition] = useState<[number, number, number]>([0, 0, 0]);
-  const [dimensions, setDimensions] = useState<[number, number, number]>([1, 1, 1]);
-  const [rotation, setRotation] = useState<[number, number, number]>([0, 0, 0]);
+  // Calculate derived values directly from store
+  const position = selectedObject 
+    ? [selectedObject.position.x, selectedObject.position.y, selectedObject.position.z] as [number, number, number]
+    : [0, 0, 0];
 
-  // Sync local state with store
-  useEffect(() => {
-    if (selectedObject && selectedObjectData) {
-      const pos = selectedObject.position;
-      setPosition([pos.x, pos.y, pos.z]);
+  const dimensions = selectedObjectData?.dimensions || [1, 1, 1];
 
-      const rot = selectedObject.rotation;
-      setRotation([
-        (rot.x * 180) / Math.PI,
-        (rot.y * 180) / Math.PI,
-        (rot.z * 180) / Math.PI
-      ]);
+  const rotation = selectedObject 
+    ? [
+        (selectedObject.rotation.x * 180) / Math.PI,
+        (selectedObject.rotation.y * 180) / Math.PI,
+        (selectedObject.rotation.z * 180) / Math.PI
+      ] as [number, number, number]
+    : [0, 0, 0];
 
-      setDimensions(selectedObjectData.dimensions);
+  const handlePositionChange = useCallback((newPosition: [number, number, number]) => {
+    if (selectedObjectId) {
+      updateObject(selectedObjectId, { position: newPosition });
     }
-  }, [selectedObject, selectedObjectData]);
+  }, [selectedObjectId, updateObject]);
 
-  // Sync rotation from object to local state
-  useEffect(() => {
-    if (selectedObject) {
-      const rot = selectedObject.rotation;
-      setRotation([
-        (rot.x * 180) / Math.PI,
-        (rot.y * 180) / Math.PI,
-        (rot.z * 180) / Math.PI
-      ]);
+  const handleDimensionsChange = useCallback((newDimensions: [number, number, number]) => {
+    if (selectedObjectId) {
+      updateObject(selectedObjectId, { dimensions: newDimensions });
     }
-  }, [selectedObject?.rotation.x, selectedObject?.rotation.y, selectedObject?.rotation.z]);
+  }, [selectedObjectId, updateObject]);
 
-  // Update store when local state changes
   const handleRotationChange = useCallback((newRotation: [number, number, number]) => {
     if (selectedObjectId) {
       updateObject(selectedObjectId, {
@@ -58,11 +55,8 @@ export const useObjectProperties = () => {
     position,
     dimensions,
     rotation,
-    setPosition,
-    setDimensions,
-    setRotation: (newRotation: [number, number, number]) => {
-      setRotation(newRotation);
-      handleRotationChange(newRotation);
-    },
+    setPosition: handlePositionChange,
+    setDimensions: handleDimensionsChange,
+    setRotation: handleRotationChange
   };
 };
